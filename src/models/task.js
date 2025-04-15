@@ -26,17 +26,25 @@ async function connect () {
 }
 
 export class taskModel {
-  static async getAll ({ status }) {
+  static async getAll ({ status, title }) {
     const db = await connect()
+    const query = {}
+
     if (status) {
-      return db.find({
-        status: {
-          $regex: status,
-          $options: 'i'
-        }
-      }).toArray()
+      query.status = {
+        $regex: status,
+        $options: 'i'
+      }
     }
-    return db.find({}).toArray()
+
+    if (title) {
+      query.title = {
+        $regex: title,
+        $options: 'i'
+      }
+    }
+
+    return db.find(query).toArray()
   }
 
   static async getById ({ id }) {

@@ -5,11 +5,10 @@ export class tasksController {
   static async getAll (req, res) {
     console.log(`[${new Date().toISOString()}] GET /tasks - Query params: ${JSON.stringify(req.query)}`)
 
-    const { status } = req.query
-    const tasks = await taskModel.getAll({ status })
+    const { status, title } = req.query
+    const tasks = await taskModel.getAll({ status, title })
 
     if (tasks.length === 0) {
-      console.log(`[${new Date().toISOString()}] GET /tasks - No tasks found with status: ${status || 'any'}`)
       return res.status(404).json({ message: 'No tasks found' })
     }
 

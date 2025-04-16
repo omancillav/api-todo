@@ -5,7 +5,8 @@ export const corsMiddleware = () => cors({
     const ACCEPTED_ORIGINS = [
       'http://localhost:8080',
       'http://127.0.0.1:5500',
-      'https://task-web-pink.vercel.app/'
+      'https://task-web-mancillaos-projects.vercel.app',
+      'https://task-web-pink.vercel.app'
     ]
     if (ACCEPTED_ORIGINS.includes(origin)) {
       return callback(null, true)

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 // Definir el enum para el campo status
-const TaskStatus = z.enum(['pendiente', 'en proceso', 'completada'], {
+const TaskStatus = z.enum(['Pendiente', 'En proceso', 'Completada'], {
   errorMap: (issue, ctx) => ({
     message: 'El estado debe ser "pendiente", "en proceso" o "completada"'
   })

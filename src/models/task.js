@@ -44,7 +44,7 @@ export class taskModel {
       }
     }
 
-    return db.find(query).toArray()
+    return db.find(query).sort({ createdAt: -1 }).toArray()
   }
 
   static async getById ({ id }) {

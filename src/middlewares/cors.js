@@ -4,7 +4,8 @@ export const corsMiddleware = () => cors({
   origin: (origin, callback) => {
     const ACCEPTED_ORIGINS = [
       'http://localhost:8080',
-      'https://movie-api-3ifg.onrender.com'
+      'http://127.0.0.1:5500',
+      'https://task-web-pink.vercel.app/'
     ]
     if (ACCEPTED_ORIGINS.includes(origin)) {
       return callback(null, true)

@@ -8,6 +8,7 @@ export const corsMiddleware = () => cors({
       'https://task-web-mancillaos-projects.vercel.app',
       'https://task-web-pink.vercel.app'
     ]
+
     if (ACCEPTED_ORIGINS.includes(origin)) {
       return callback(null, true)
     }

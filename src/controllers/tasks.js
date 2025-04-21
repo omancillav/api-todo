@@ -1,12 +1,15 @@
-import { taskModel } from '../models/task.js'
 import { validateTask, validatePartialTask } from '../schemas/taskSchema.js'
 
-export class tasksController {
-  static async getAll (req, res) {
+export class TasksController {
+  constructor ({ taskModel }) {
+    this.taskModel = taskModel
+  }
+
+  getAll = async (req, res) => {
     console.log(`[${new Date().toISOString()}] GET /tasks - Query params: ${JSON.stringify(req.query)}`)
 
     const { status, title } = req.query
-    const tasks = await taskModel.getAll({ status, title })
+    const tasks = await this.taskModel.getAll({ status, title })
 
     if (tasks.length === 0) {
       return res.status(404).json({ message: 'No tasks found' })
@@ -16,11 +19,11 @@ export class tasksController {
     res.json(tasks)
   }
 
-  static async getById (req, res) {
+  getById = async (req, res) => {
     const { id } = req.params
     console.log(`[${new Date().toISOString()}] GET /tasks/${id} - Fetching task by ID`)
 
-    const task = await taskModel.getById({ id })
+    const task = await this.taskModel.getById({ id })
 
     if (!task) {
       console.log(`[${new Date().toISOString()}] GET /tasks/${id} - Task not found`)
@@ -31,7 +34,7 @@ export class tasksController {
     res.json(task)
   }
 
-  static async createTask (req, res) {
+  createTask = async (req, res) => {
     console.log(`[${new Date().toISOString()}] POST /tasks - Creating new task: ${JSON.stringify(req.body)}`)
 
     const result = validateTask(req.body)
@@ -41,12 +44,12 @@ export class tasksController {
       return res.status(422).json({ error: JSON.parse(result.error.message) })
     }
 
-    const newTask = await taskModel.createTask({ input: result.data })
+    const newTask = await this.taskModel.createTask({ input: result.data })
     console.log(`[${new Date().toISOString()}] POST /tasks - Task created successfully with ID: ${newTask.id}`)
     res.status(201).json(newTask)
   }
 
-  static async updateTask (req, res) {
+  updateTask = async (req, res) => {
     const { id } = req.params
     console.log(`[${new Date().toISOString()}] PUT/PATCH /tasks/${id} - Updating task with data: ${JSON.stringify(req.body)}`)
 
@@ -57,7 +60,7 @@ export class tasksController {
       return res.status(422).json({ error: JSON.parse(result.error.message) })
     }
 
-    const updatedTask = await taskModel.updateTask({ id, input: result.data })
+    const updatedTask = await this.taskModel.updateTask({ id, input: result.data })
 
     if (!updatedTask) {
       console.log(`[${new Date().toISOString()}] PUT/PATCH /tasks/${id} - Task not found`)
@@ -68,11 +71,11 @@ export class tasksController {
     res.json(updatedTask)
   }
 
-  static async deleteTask (req, res) {
+  deleteTask = async (req, res) => {
     const { id } = req.params
     console.log(`[${new Date().toISOString()}] DELETE /tasks/${id} - Attempting to delete task`)
 
-    const result = await taskModel.deleteTask({ id })
+    const result = await this.taskModel.deleteTask({ id })
 
     if (!result) {
       console.log(`[${new Date().toISOString()}] DELETE /tasks/${id} - Task not found`)

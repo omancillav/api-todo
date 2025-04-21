@@ -44,21 +44,16 @@ export class taskModel {
       }
     }
 
-    // Consulta para obtener todos los documentos
     const tasks = await db.find(query).toArray()
 
-    // Ordenar manualmente por estado y fecha
     return tasks.sort((a, b) => {
       // Verificar si alguno es "Pendiente"
       const aIsPendiente = /^pendiente$/i.test(a.status)
       const bIsPendiente = /^pendiente$/i.test(b.status)
 
-      // Si uno es pendiente y el otro no, el pendiente va primero
       if (aIsPendiente && !bIsPendiente) return -1
       if (!aIsPendiente && bIsPendiente) return 1
 
-      // Si ambos tienen el mismo estado (ambos pendientes o ambos no pendientes)
-      // ordenar por fecha descendente (más reciente primero)
       return new Date(b.createdAt) - new Date(a.createdAt)
     })
   }

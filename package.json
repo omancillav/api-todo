@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev:mongo": "node --watch server-with-mongo.js",
-    "dev:mysql":" node --watch server-with-mysql.js",
-    "start": "node app.js"
+    "dev:mysql":"node --watch server-with-mysql.js",
+    "start": "node server-with-mysql.js"
   },
   "keywords": [],
   "author": "",

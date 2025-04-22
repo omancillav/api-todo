@@ -2,6 +2,7 @@ import express, { json } from 'express'
 import { corsMiddleware } from './src/middlewares/cors.js'
 import { createTaskRouter } from './src/routes/tasks.js'
 import dotenv from 'dotenv'
+import morgan from 'morgan' // Importar Morgan
 
 dotenv.config()
 
@@ -11,6 +12,7 @@ export const createApp = ({ taskModel }) => {
 
   app.use(json())
   app.disable('x-powered-by')
+  app.use(morgan('combined'))
   app.use(corsMiddleware())
 
   app.use('/tasks', createTaskRouter({ taskModel }))

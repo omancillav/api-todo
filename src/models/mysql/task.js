@@ -97,13 +97,17 @@ export class taskModel {
 
   static async updateTask ({ id, input }) {
     const task = await this.getById({ id })
+
     if (!task) return false
 
     if (Object.keys(input).length === 0) {
       return task
     }
 
-    const fields = Object.keys(input).map(key => `${key} = ?`)
+    const fields = Object.keys(input).map((key) => {
+      return key === 'userId' ? 'user_id = ?' : `${key} = ?`
+    })
+
     const values = Object.values(input)
     values.push(id)
 

@@ -32,11 +32,6 @@ const taskSchema = z.object({
   status: TaskStatus.optional().default('pendiente') // Por defecto: pendiente
 })
 
-// Esquema para validar el parámetro de estado en GET /api/tasks/status/:status
-const taskStatusParamSchema = z.object({
-  status: TaskStatus
-})
-
 // Funciones de validación
 export function validateTask (object) {
   return taskSchema.safeParse(object)
@@ -44,8 +39,4 @@ export function validateTask (object) {
 
 export function validatePartialTask (object) {
   return taskSchema.partial().safeParse(object)
-}
-
-export function validateTaskStatusParam (object) {
-  return taskStatusParamSchema.safeParse(object)
 }

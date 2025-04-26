@@ -9,6 +9,12 @@ const db = createClient({
 })
 
 export class userModel {
+  static async validatePassword ({ password, hashedPassword }) {
+    const isValid = await bcrypt.compare(password, hashedPassword)
+
+    return isValid
+  }
+
   static async getAll ({ username, email }) {
     let sql = 'SELECT * FROM users'
     const args = []
@@ -31,8 +37,6 @@ export class userModel {
   static async getById ({ id }) {
     const sql = 'SELECT * FROM users WHERE id = ?'
     const args = [id]
-
-    console.log(`Executing SQL: ${sql} with args: ${args}`)
 
     const result = await db.execute({
       sql,

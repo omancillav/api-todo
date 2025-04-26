@@ -41,7 +41,6 @@ export class TasksController {
     if (result.error) {
       return res.status(422).json({ error: JSON.parse(result.error.message) })
     }
-    console.log(result.data)
 
     const newTask = await this.taskModel.createTask({ input: result.data })
     res.status(201).json(newTask)

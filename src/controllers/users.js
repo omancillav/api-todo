@@ -1,8 +1,41 @@
 import { validateUser, validatePartialUser } from '../schemas/userSchema.js'
+import { JWT_SECRET } from '../../config.js'
+import jwt from 'jsonwebtoken'
 
 export class UserController {
   constructor ({ userModel }) {
     this.userModel = userModel
+  }
+
+  login = async (req, res) => {
+    const { username, password } = req.body
+
+    try {
+      const user = await this.userModel.getAll({ username })
+      const hashedPassword = user[0].password
+
+      if (user.length === 0) {
+        return res.status(404).json({ message: 'Invalid credentials' })
+      }
+      const isValidPassword = await this.userModel.validatePassword({ password, hashedPassword })
+
+      if (!isValidPassword) return res.status(401).json({ message: 'Invalid password' })
+
+      const payload = {
+        id: user[0].id,
+        username: user[0].username
+      }
+
+      const token = jwt.sign(
+        payload,
+        JWT_SECRET,
+        { expiresIn: '1h' }
+      )
+      res.json({ token })
+    } catch (e) {
+      console.error(e)
+      return res.status(500).json({ message: 'Internal server error' })
+    }
   }
 
   getAll = async (req, res) => {

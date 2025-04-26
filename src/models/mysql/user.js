@@ -14,10 +14,10 @@ export class userModel {
     const args = []
 
     if (username) {
-      sql += ' LIKE username = ?'
+      sql += ' WHERE username LIKE ?'
       args.push(`%${username}%`)
     } else if (email) {
-      sql += ' WHERE email WHERE ?'
+      sql += ' WHERE email = ?'
       args.push(email)
     }
 

@@ -29,7 +29,11 @@ const taskSchema = z.object({
     .optional()
     .transform((val) => (val === '' ? undefined : val)), // Convertir cadenas vacías a undefined
 
-  status: TaskStatus.optional().default('pendiente') // Por defecto: pendiente
+  status: TaskStatus.optional().default('pendiente'), // Por defecto: pendiente
+  userId: z
+    .number()
+    .int('El ID de usuario debe ser un número entero')
+    .positive('El ID de usuario debe ser un número positivo')
 })
 
 // Funciones de validación

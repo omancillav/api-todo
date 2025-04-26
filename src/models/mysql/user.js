@@ -32,6 +32,8 @@ export class userModel {
     const sql = 'SELECT * FROM users WHERE id = ?'
     const args = [id]
 
+    console.log(`Executing SQL: ${sql} with args: ${args}`)
+
     const result = await db.execute({
       sql,
       args

@@ -4,7 +4,7 @@ export const corsMiddleware = () => cors({
   origin: (origin, callback) => {
     const ACCEPTED_ORIGINS = [
       'http://127.0.0.1:5500',
-      'https://to-do-app-olive-ten.vercel.app/'
+      'https://to-do-app-olive-ten.vercel.app'
     ]
 
     if (ACCEPTED_ORIGINS.includes(origin)) {

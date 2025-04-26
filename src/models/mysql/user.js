@@ -9,12 +9,6 @@ const db = createClient({
 })
 
 export class userModel {
-  static async validatePassword ({ password, hashedPassword }) {
-    const isValid = await bcrypt.compare(password, hashedPassword)
-
-    return isValid
-  }
-
   static async getAll ({ username, email }) {
     let sql = 'SELECT * FROM users'
     const args = []

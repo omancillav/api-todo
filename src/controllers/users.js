@@ -1,5 +1,6 @@
 import { validateUser, validatePartialUser } from '../schemas/userSchema.js'
 import { JWT_SECRET } from '../../config.js'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 export class UserController {
@@ -17,7 +18,7 @@ export class UserController {
       if (user.length === 0) {
         return res.status(404).json({ message: 'Invalid credentials' })
       }
-      const isValidPassword = await this.userModel.validatePassword({ password, hashedPassword })
+      const isValidPassword = await bcrypt.compare(password, hashedPassword)
 
       if (!isValidPassword) return res.status(401).json({ message: 'Invalid password' })
 

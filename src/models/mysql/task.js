@@ -9,14 +9,19 @@ const db = createClient({
 })
 
 export class taskModel {
-  static async getAll ({ status, title }) {
+  static async getAll ({ status, title, userId }) {
     let sql = 'SELECT * FROM tasks'
     const args = []
 
+    if (userId) {
+      sql += ' WHERE user_id = ?'
+      args.push(userId)
+    }
     if (status) {
       sql += ' WHERE status = ?'
       args.push(status)
-    } else if (title) {
+    }
+    if (title) {
       sql += ' WHERE title LIKE ?'
       args.push(`%${title}%`)
     }
@@ -68,8 +73,6 @@ export class taskModel {
     const { title, description, status, userId } = input
 
     const validUser = await userModel.getById({ id: userId })
-
-    console.log('validUser', validUser)
 
     if (!validUser) {
       return { error: `User with id ${userId} does not exist` }

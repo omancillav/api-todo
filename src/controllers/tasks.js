@@ -7,7 +7,10 @@ export class TasksController {
 
   getAll = async (req, res) => {
     const { status, title } = req.query
-    const tasks = await this.taskModel.getAll({ status, title })
+
+    const userId = req.headers.user_id
+
+    const tasks = await this.taskModel.getAll({ status, title, userId })
 
     if (tasks.length === 0) {
       return res.status(404).json({ message: 'No tasks found' })

@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
 // Definir el enum para el campo status
-const TaskStatus = z.enum(['Pendiente', 'En proceso', 'Completada'], {
+const TaskStatus = z.enum(['Pendiente', 'Completada'], {
   errorMap: (issue, ctx) => ({
-    message: 'El estado debe ser "pendiente", "en proceso" o "completada"'
+    message: 'El estado debe ser "Pendiente" o "Completada"'
   })
 })
 
@@ -29,7 +29,7 @@ const taskSchema = z.object({
     .optional()
     .transform((val) => (val === '' ? undefined : val)), // Convertir cadenas vacías a undefined
 
-  status: TaskStatus.optional().default('pendiente'), // Por defecto: pendiente
+  status: TaskStatus.optional().default('Pendiente'), // Por defecto: pendiente
   userId: z
     .number()
     .int('El ID de usuario debe ser un número entero')

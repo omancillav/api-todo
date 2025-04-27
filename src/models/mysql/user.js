@@ -16,7 +16,8 @@ export class userModel {
     if (username) {
       sql += ' WHERE username LIKE ?'
       args.push(`%${username}%`)
-    } else if (email) {
+    }
+    if (email) {
       sql += ' WHERE email = ?'
       args.push(email)
     }

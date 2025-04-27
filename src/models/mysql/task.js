@@ -69,8 +69,10 @@ export class taskModel {
 
     const validUser = await userModel.getById({ id: userId })
 
+    console.log('validUser', validUser)
+
     if (!validUser) {
-      throw new Error('User not found')
+      return { error: `User with id ${userId} does not exist` }
     }
 
     const query = {
@@ -91,7 +93,7 @@ export class taskModel {
       }
     } catch (error) {
       console.error('Error al crear la tarea:', error)
-      throw error
+      return { error: error.message }
     }
   }
 

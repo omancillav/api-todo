@@ -7,7 +7,7 @@ dotenv.config()
 export const authenticateToken = (req, res, next) => {
   const token = req.headers.token
 
-  if (token == null) {
+  if (!token) {
     return res.status(401).json({ message: 'Token not provided' })
   }
 

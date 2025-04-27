@@ -1,4 +1,5 @@
 import { createClient } from '@libsql/client'
+import { userModel } from '../mysql/user.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -29,6 +30,27 @@ export class taskModel {
     return result.rows
   }
 
+  static async getByUserId ({ userId, status, title }) {
+    let sql = 'SELECT * FROM tasks WHERE user_id = ?'
+    const args = [userId]
+
+    if (status) {
+      sql += ' AND status = ?'
+      args.push(status)
+    } else if (title) {
+      sql += ' AND title LIKE ?'
+      args.push(`%${title}%`)
+    }
+
+    sql += ' ORDER BY CASE WHEN LOWER(status) = "pendiente" THEN 0 ELSE 1 END, created_at DESC'
+
+    const result = await db.execute({
+      sql,
+      args
+    })
+    return result.rows
+  }
+
   static async getById ({ id }) {
     const query = {
       sql: 'SELECT * FROM tasks WHERE id = ?',
@@ -43,11 +65,17 @@ export class taskModel {
     const mexicoCityDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Mexico_City' }))
     const formattedDate = mexicoCityDate.toISOString().slice(0, 19).replace('T', ' ')
 
-    const { title, description, status } = input
+    const { title, description, status, userId } = input
+
+    const validUser = await userModel.getById({ id: userId })
+
+    if (!validUser) {
+      throw new Error('User not found')
+    }
 
     const query = {
-      sql: 'INSERT INTO tasks (title, description, status, created_at) VALUES (?, ?, ?, ?)',
-      args: [title, description, status, formattedDate]
+      sql: 'INSERT INTO tasks (title, description, status, created_at, user_id) VALUES (?, ?, ?, ?, ?)',
+      args: [title, description, status, formattedDate, userId]
     }
 
     try {
@@ -58,7 +86,8 @@ export class taskModel {
         title,
         description,
         status,
-        createdAt: formattedDate
+        createdAt: formattedDate,
+        userId
       }
     } catch (error) {
       console.error('Error al crear la tarea:', error)
@@ -68,13 +97,17 @@ export class taskModel {
 
   static async updateTask ({ id, input }) {
     const task = await this.getById({ id })
+
     if (!task) return false
 
     if (Object.keys(input).length === 0) {
       return task
     }
 
-    const fields = Object.keys(input).map(key => `${key} = ?`)
+    const fields = Object.keys(input).map((key) => {
+      return key === 'userId' ? 'user_id = ?' : `${key} = ?`
+    })
+
     const values = Object.values(input)
     values.push(id)
 

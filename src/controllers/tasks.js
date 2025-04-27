@@ -25,6 +25,16 @@ export class TasksController {
     res.json(task)
   }
 
+  getByUserId = async (req, res) => {
+    const { userId } = req.params
+    const { status, title } = req.query
+    const tasks = await this.taskModel.getByUserId({ userId, status, title })
+    if (tasks.length === 0) {
+      return res.status(404).json({ message: 'No tasks found for this user' })
+    }
+    res.json(tasks)
+  }
+
   createTask = async (req, res) => {
     const result = validateTask(req.body)
 

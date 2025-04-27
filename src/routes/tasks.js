@@ -8,6 +8,7 @@ export const createTaskRouter = ({ taskModel }) => {
 
   tasksRouter.get('/', tasksController.getAll)
   tasksRouter.get('/:id', tasksController.getById)
+  tasksRouter.get('/user/:userId', tasksController.getByUserId)
 
   tasksRouter.post('/', tasksController.createTask)
 

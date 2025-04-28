@@ -5,10 +5,7 @@ import { createTaskRouter } from './src/routes/tasks.js'
 import { createUserRouter } from './src/routes/users.js'
 import { createAuthRouter } from './src/routes/auth.js'
 import { port, logger } from './config.js'
-import dotenv from 'dotenv'
 import morgan from 'morgan'
-
-dotenv.config()
 
 export const createApp = ({ taskModel, userModel }) => {
   const app = express()
@@ -20,7 +17,7 @@ export const createApp = ({ taskModel, userModel }) => {
 
   app.use('/tasks', authenticateToken, createTaskRouter({ taskModel }))
   app.use('/users', createUserRouter({ userModel }))
-  app.use('/auth', createAuthRouter())
+  app.use('/auth', createAuthRouter({ userModel }))
 
   app.listen(port, () => {
     console.log(`\nServer is running on port ${port}`)

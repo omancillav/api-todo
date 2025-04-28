@@ -15,10 +15,10 @@ const taskSchema = z.object({
     .max(100, 'El título no debe exceder los 100 caracteres')
     .trim()
     .refine(
-      (val) => /^[a-zA-Z0-9\s.,!?áéíóúÁÉÍÓÚñÑ-]+$/.test(val),
+      (val) => /^[a-zA-Z0-9\s.,!?áéíóúÁÉÍÓÚñÑ/_\-"]+$/.test(val),
       {
         message:
-          'El título solo puede contener letras, números, espacios y signos básicos de puntuación'
+          'El título solo puede contener letras, números, espacios, signos básicos de puntuación y los caracteres /, -, _, ""'
       }
     ),
 

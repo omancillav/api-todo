@@ -1,5 +1,5 @@
 import { createClient } from '@libsql/client'
-import { userModel } from '../mysql/user.js'
+import { userModel } from './userModel.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -9,7 +9,7 @@ const db = createClient({
 })
 
 export class taskModel {
-  static async getAll ({ status, title, userId }) {
+  static async getTasks ({ status, title, userId }) {
     let sql = 'SELECT * FROM tasks'
     const args = []
 

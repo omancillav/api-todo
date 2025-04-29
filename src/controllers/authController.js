@@ -1,17 +1,14 @@
+import { userModel } from '../models/userModel.js'
 import { JWT_SECRET } from '../../config.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 export class AuthController {
-  constructor ({ userModel }) {
-    this.userModel = userModel
-  }
-
-  login = async (req, res) => {
+  static async login (req, res) {
     const { username, password } = req.body
 
     try {
-      const user = await this.userModel.getAll({ username })
+      const user = await userModel.getAll({ username })
       const userPassword = user[0].password
 
       if (user.length === 0) {
@@ -45,11 +42,11 @@ export class AuthController {
     }
   }
 
-  customToken = async (req, res) => {
+  static async customToken (req, res) {
     const { username, password, expiration } = req.body
 
     try {
-      const user = await this.userModel.getAll({ username })
+      const user = await userModel.getAll({ username })
       const userPassword = user[0].password
 
       if (user.length === 0) {

@@ -1,16 +1,13 @@
 import { validateTask, validatePartialTask } from '../schemas/taskSchema.js'
+import { taskModel } from '../models/taskModel.js'
 
 export class TasksController {
-  constructor ({ taskModel }) {
-    this.taskModel = taskModel
-  }
-
-  getAll = async (req, res) => {
+  static async getAll (req, res) {
     const { status, title } = req.query
 
     const userId = req.headers.user_id
 
-    const tasks = await this.taskModel.getAll({ status, title, userId })
+    const tasks = await taskModel.getTasks({ status, title, userId })
 
     if (tasks.length === 0) {
       return res.status(404).json({ message: 'No tasks found' })
@@ -18,9 +15,9 @@ export class TasksController {
     res.json(tasks)
   }
 
-  getById = async (req, res) => {
+  static async getById (req, res) {
     const { id } = req.params
-    const task = await this.taskModel.getById({ id })
+    const task = await taskModel.getById({ id })
 
     if (!task) {
       return res.status(404).json({ message: 'Task not found' })
@@ -28,24 +25,24 @@ export class TasksController {
     res.json(task)
   }
 
-  getByUserId = async (req, res) => {
+  static async getByUserId (req, res) {
     const { userId } = req.params
     const { status, title } = req.query
-    const tasks = await this.taskModel.getByUserId({ userId, status, title })
+    const tasks = await taskModel.getByUserId({ userId, status, title })
     if (tasks.length === 0) {
       return res.status(404).json({ message: 'No tasks found for this user' })
     }
     res.json(tasks)
   }
 
-  createTask = async (req, res) => {
+  static async createTask (req, res) {
     const result = validateTask(req.body)
 
     if (result.error) {
       return res.status(422).json({ error: JSON.parse(result.error.message) })
     }
 
-    const newTask = await this.taskModel.createTask({ input: result.data })
+    const newTask = await taskModel.createTask({ input: result.data })
 
     if (newTask.error) {
       return res.status(404).json({ error: newTask.error })
@@ -53,7 +50,7 @@ export class TasksController {
     res.status(201).json(newTask)
   }
 
-  updateTask = async (req, res) => {
+  static async updateTask (req, res) {
     const { id } = req.params
     const result = validatePartialTask(req.body)
 
@@ -61,7 +58,7 @@ export class TasksController {
       return res.status(422).json({ error: JSON.parse(result.error.message) })
     }
 
-    const updatedTask = await this.taskModel.updateTask({ id, input: result.data })
+    const updatedTask = await taskModel.updateTask({ id, input: result.data })
 
     if (!updatedTask) {
       return res.status(404).json({ message: 'Task not found' })
@@ -69,9 +66,9 @@ export class TasksController {
     res.json(updatedTask)
   }
 
-  deleteTask = async (req, res) => {
+  static async deleteTask (req, res) {
     const { id } = req.params
-    const result = await this.taskModel.deleteTask({ id })
+    const result = await taskModel.deleteTask({ id })
 
     if (!result) {
       return res.status(404).json({ error: 'Task Not Found' })

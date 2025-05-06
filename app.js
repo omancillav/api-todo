@@ -7,6 +7,8 @@ import { authRouter } from './src/routes/authRouter.js'
 import { port, logger } from './config.js'
 import morgan from 'morgan'
 
+console.log(port, logger)
+
 const app = express()
 
 app.use(json())

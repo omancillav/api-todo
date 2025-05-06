@@ -1,11 +1,10 @@
 import { createClient } from '@libsql/client'
-import dotenv from 'dotenv'
+import { MYSQL_URL, MYSQL_TOKEN } from '../../config.js'
 import bcrypt from 'bcrypt'
-dotenv.config()
 
 const db = createClient({
-  url: process.env.MYSQL_URI,
-  authToken: process.env.MYSQL_TOKEN
+  url: MYSQL_URL,
+  authToken: MYSQL_TOKEN
 })
 
 export class userModel {

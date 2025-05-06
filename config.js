@@ -1,8 +1,10 @@
-import dotenv from 'dotenv'
-dotenv.config()
+process.loadEnvFile()
 
 export const {
-  port = process.env.PORT || 3000,
-  logger = process.env.NODE_ENV === 'production' ? 'combined' : 'dev',
-  JWT_SECRET = process.env.JWT_SECRET
+  PORT: port = '3000',
+  MYSQL_URL,
+  MYSQL_TOKEN,
+  NODE_ENV,
+  logger = NODE_ENV === 'production' ? 'combined' : 'dev',
+  JWT_SECRET
 } = process.env

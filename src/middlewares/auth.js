@@ -1,8 +1,5 @@
 import { JWT_SECRET } from '../../config.js'
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-
-dotenv.config()
 
 export const authenticateToken = (req, res, next) => {
   const token = req.headers.token

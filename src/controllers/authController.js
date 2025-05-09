@@ -9,12 +9,12 @@ export class AuthController {
 
     try {
       const user = await userModel.getAll({ username })
+      if (user.length === 0) {
+        return res.status(404).json({ message: 'Username not found' })
+      }
       const userPassword = user[0].password
 
-      if (user.length === 0) {
-        return res.status(404).json({ message: 'Invalid credentials' })
-      }
-      const isValidPassword = bcrypt.compare(password, userPassword)
+      const isValidPassword = await bcrypt.compare(password, userPassword)
 
       if (!isValidPassword) return res.status(401).json({ message: 'Invalid password' })
 
@@ -47,12 +47,12 @@ export class AuthController {
 
     try {
       const user = await userModel.getAll({ username })
+      if (user.length === 0) {
+        return res.status(404).json({ message: 'Username not found' })
+      }
       const userPassword = user[0].password
 
-      if (user.length === 0) {
-        return res.status(404).json({ message: 'Invalid credentials' })
-      }
-      const isValidPassword = bcrypt.compare(password, userPassword)
+      const isValidPassword = await bcrypt.compare(password, userPassword)
 
       if (!isValidPassword) return res.status(401).json({ message: 'Invalid password' })
 

@@ -90,7 +90,7 @@ export class userModel {
 
   static async deleteUser ({ id }) {
     const query = {
-      sql: 'DELETE FROM users WHERE id = ?',
+      sql: 'UPDATE users SET is_active = FALSE WHERE id = ?',
       args: [id]
     }
 

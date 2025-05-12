@@ -8,30 +8,19 @@ const db = createClient({
 })
 
 export class taskModel {
-  static async getTasks ({ status, title }) {
-    let sql = 'SELECT * FROM tasks'
+  static async getTasks ({ userId, active }) {
+    let sql = 'SELECT * FROM tasks '
     const args = []
 
-    if (status) {
-      sql += ' WHERE status = ?'
-      args.push(status)
+    if (userId) {
+      sql += ' WHERE user_id = ?'
+      args.push(userId)
     }
-    if (title) {
-      sql += ' WHERE title LIKE ?'
-      args.push(`%${title}%`)
-    }
-
-    const result = await db.execute({ sql, args })
-    return result.rows
-  }
-
-  static async getByUser ({ userId, active }) {
-    let sql = 'SELECT * FROM tasks WHERE user_id = ?'
-    const args = [userId]
-
     if (active) {
       sql += ' AND is_active = ?'
       args.push(active)
+    } else {
+      sql += ' AND is_active = 1'
     }
 
     const result = await db.execute({ sql, args })

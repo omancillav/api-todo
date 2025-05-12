@@ -21,10 +21,7 @@ export class userModel {
       args.push(active)
     }
 
-    const result = await db.execute({
-      sql,
-      args
-    })
+    const result = await db.execute({ sql, args })
     return result.rows
   }
 
@@ -102,5 +99,18 @@ export class userModel {
     } catch (e) {
       throw new Error('Error deleting user')
     }
+  }
+
+  static async validateActiveUser ({ username }) {
+    const query = {
+      sql: 'SELECT is_active FROM users WHERE username = ?',
+      args: [username]
+    }
+
+    const result = await db.execute(query)
+    if (result.rows[0].is_active === 0) {
+      return false
+    }
+    return true
   }
 }

@@ -3,9 +3,9 @@ import { taskModel } from '../models/taskModel.js'
 
 export class TasksController {
   static async getAll (req, res) {
-    const { status, title } = req.query
-
-    const tasks = await taskModel.getTasks({ status, title })
+    const { active } = req.query
+    const userId = req.headers.user_id
+    const tasks = await taskModel.getTasks({ userId, active })
 
     if (tasks.length === 0) {
       return res.status(404).json({ message: 'No tasks found' })
@@ -21,16 +21,6 @@ export class TasksController {
       return res.status(404).json({ message: 'Task not found' })
     }
     res.json(task)
-  }
-
-  static async getByUser (req, res) {
-    const { userId } = req.params
-    const { active } = req.query
-    const tasks = await taskModel.getByUser({ userId, active })
-    if (tasks.length === 0) {
-      return res.status(404).json({ message: 'No tasks found for this user' })
-    }
-    res.json(tasks)
   }
 
   static async createTask (req, res) {

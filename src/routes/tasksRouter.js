@@ -5,7 +5,6 @@ export const tasksRouter = Router()
 
 tasksRouter.get('/', TasksController.getAll)
 tasksRouter.get('/:id', TasksController.getById)
-tasksRouter.get('/user/:userId', TasksController.getByUser)
 
 tasksRouter.post('/', TasksController.createTask)
 

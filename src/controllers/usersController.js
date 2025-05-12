@@ -3,9 +3,9 @@ import { userModel } from '../models/userModel.js'
 
 export class UserController {
   static async getAll (req, res) {
-    const { username, email } = req.query
+    const { username, status } = req.query
 
-    const users = await userModel.getAll({ username, email })
+    const users = await userModel.getAll({ username, status })
 
     if (users.length === 0) {
       return res.status(404).json({ message: 'No users found' })

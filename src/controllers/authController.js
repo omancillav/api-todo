@@ -7,6 +7,12 @@ export class AuthController {
   static async login (req, res) {
     const { username, password } = req.body
 
+    const isActive = await userModel.validateActiveUser({ username })
+
+    if (!isActive) {
+      return res.status(401).json({ message: 'User is not active' })
+    }
+
     try {
       const user = await userModel.getAll({ username })
       if (user.length === 0) {

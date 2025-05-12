@@ -8,7 +8,7 @@ const db = createClient({
 })
 
 export class userModel {
-  static async getAll ({ username, status }) {
+  static async getAll ({ username, active }) {
     let sql = 'SELECT * FROM users'
     const args = []
 
@@ -16,9 +16,9 @@ export class userModel {
       sql += ' WHERE username LIKE ?'
       args.push(`%${username}%`)
     }
-    if (status) {
+    if (active) {
       sql += ' WHERE is_active = ?'
-      args.push(status)
+      args.push(active)
     }
 
     const result = await db.execute({

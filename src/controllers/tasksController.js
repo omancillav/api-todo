@@ -5,9 +5,7 @@ export class TasksController {
   static async getAll (req, res) {
     const { status, title } = req.query
 
-    const userId = req.headers.user_id
-
-    const tasks = await taskModel.getTasks({ status, title, userId })
+    const tasks = await taskModel.getTasks({ status, title })
 
     if (tasks.length === 0) {
       return res.status(404).json({ message: 'No tasks found' })
@@ -25,10 +23,10 @@ export class TasksController {
     res.json(task)
   }
 
-  static async getByUserId (req, res) {
+  static async getByUser (req, res) {
     const { userId } = req.params
-    const { status, title } = req.query
-    const tasks = await taskModel.getByUserId({ userId, status, title })
+    const { active } = req.query
+    const tasks = await taskModel.getByUser({ userId, active })
     if (tasks.length === 0) {
       return res.status(404).json({ message: 'No tasks found for this user' })
     }

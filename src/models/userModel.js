@@ -8,7 +8,7 @@ const db = createClient({
 })
 
 export class userModel {
-  static async getAll ({ username, email }) {
+  static async getAll ({ username, active }) {
     let sql = 'SELECT * FROM users'
     const args = []
 
@@ -16,9 +16,9 @@ export class userModel {
       sql += ' WHERE username LIKE ?'
       args.push(`%${username}%`)
     }
-    if (email) {
-      sql += ' WHERE email = ?'
-      args.push(email)
+    if (active) {
+      sql += ' WHERE is_active = ?'
+      args.push(active)
     }
 
     const result = await db.execute({
@@ -29,13 +29,12 @@ export class userModel {
   }
 
   static async getById ({ id }) {
-    const sql = 'SELECT * FROM users WHERE id = ?'
-    const args = [id]
+    const query = {
+      sql: 'SELECT * FROM users WHERE id = ?',
+      args: [id]
+    }
 
-    const result = await db.execute({
-      sql,
-      args
-    })
+    const result = await db.execute(query)
     return result.rows[0]
   }
 
@@ -90,7 +89,7 @@ export class userModel {
 
   static async deleteUser ({ id }) {
     const query = {
-      sql: 'UPDATE users SET is_active = FALSE WHERE id = ?',
+      sql: 'UPDATE users SET is_active = 0 WHERE id = ?',
       args: [id]
     }
 

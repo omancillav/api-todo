@@ -8,14 +8,10 @@ const db = createClient({
 })
 
 export class taskModel {
-  static async getTasks ({ status, title, userId }) {
+  static async getTasks ({ status, title }) {
     let sql = 'SELECT * FROM tasks'
     const args = []
 
-    if (userId) {
-      sql += ' WHERE user_id = ?'
-      args.push(userId)
-    }
     if (status) {
       sql += ' WHERE status = ?'
       args.push(status)
@@ -25,33 +21,20 @@ export class taskModel {
       args.push(`%${title}%`)
     }
 
-    sql += ' ORDER BY CASE WHEN LOWER(status) = "pendiente" THEN 0 ELSE 1 END, created_at DESC'
-
-    const result = await db.execute({
-      sql,
-      args
-    })
+    const result = await db.execute({ sql, args })
     return result.rows
   }
 
-  static async getByUserId ({ userId, status, title }) {
+  static async getByUser ({ userId, active }) {
     let sql = 'SELECT * FROM tasks WHERE user_id = ?'
     const args = [userId]
 
-    if (status) {
-      sql += ' AND status = ?'
-      args.push(status)
-    } else if (title) {
-      sql += ' AND title LIKE ?'
-      args.push(`%${title}%`)
+    if (active) {
+      sql += ' AND is_active = ?'
+      args.push(active)
     }
 
-    sql += ' ORDER BY CASE WHEN LOWER(status) = "pendiente" THEN 0 ELSE 1 END, created_at DESC'
-
-    const result = await db.execute({
-      sql,
-      args
-    })
+    const result = await db.execute({ sql, args })
     return result.rows
   }
 
@@ -117,17 +100,14 @@ export class taskModel {
 
     const query = `UPDATE tasks SET ${fields.join(', ')} WHERE id = ?`
 
-    await db.execute({
-      sql: query,
-      args: values
-    })
+    await db.execute({ sql: query, args: values })
 
     return await this.getById({ id })
   }
 
   static async deleteTask ({ id }) {
     const query = {
-      sql: 'DELETE FROM tasks WHERE id = ?',
+      sql: 'UPDATE tasks SET is_active = 0 WHERE id = ?',
       args: [id]
     }
 

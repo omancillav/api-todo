@@ -9,18 +9,21 @@ const db = createClient({
 
 export class taskModel {
   static async getTasks ({ userId, active }) {
-    let sql = 'SELECT * FROM tasks '
+    let sql = 'SELECT * FROM tasks'
     const args = []
+    let whereAdded = false
 
     if (userId) {
       sql += ' WHERE user_id = ?'
       args.push(userId)
+      whereAdded = true
     }
-    if (active) {
-      sql += ' AND is_active = ?'
+
+    if (active !== undefined) {
+      sql += whereAdded ? ' AND is_active = ?' : ' WHERE is_active = ?'
       args.push(active)
     } else {
-      sql += ' AND is_active = 1'
+      sql += whereAdded ? ' AND is_active = 1' : ' WHERE is_active = 1'
     }
 
     const result = await db.execute({ sql, args })

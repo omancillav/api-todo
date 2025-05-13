@@ -1,5 +1,5 @@
 {
-  "name": "to-do-api",
+  "name": "api-todo",
   "version": "1.0.0",
   "main": "app.js",
   "type": "module",

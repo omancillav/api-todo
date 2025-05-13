@@ -32,7 +32,7 @@ export class AuthController {
       const token = jwt.sign(
         payload,
         JWT_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: '2h' }
       )
 
       const userData = {

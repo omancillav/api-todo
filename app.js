@@ -14,6 +14,14 @@ app.disable('x-powered-by')
 app.use(morgan(logger))
 app.use(corsMiddleware())
 
+app.use('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the todo API',
+    author: 'Omar Mancilla',
+    github: 'https://github.com/omancillav/api-todo.git'
+  })
+})
+
 app.use('/tasks', authenticateToken, tasksRouter)
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)

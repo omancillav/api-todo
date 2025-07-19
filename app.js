@@ -14,6 +14,10 @@ app.disable('x-powered-by')
 app.use(morgan(logger))
 app.use(corsMiddleware())
 
+app.use('/tasks', authenticateToken, tasksRouter)
+app.use('/users', usersRouter)
+app.use('/auth', authRouter)
+
 app.use('/', (req, res) => {
   res.json({
     message: 'Welcome to the todo API',
@@ -21,10 +25,6 @@ app.use('/', (req, res) => {
     github: 'https://github.com/omancillav/api-todo.git'
   })
 })
-
-app.use('/tasks', authenticateToken, tasksRouter)
-app.use('/users', usersRouter)
-app.use('/auth', authRouter)
 
 app.listen(port, () => {
   console.log(`\nServer is running on port ${port}`)

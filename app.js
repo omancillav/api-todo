@@ -20,9 +20,9 @@ app.use('/auth', authRouter)
 
 app.use('/', (req, res) => {
   res.json({
-    message: 'Welcome to the todo API',
+    message: 'Welcome to the Donly API',
     author: 'Omar Mancilla',
-    github: 'https://github.com/omancillav/api-todo.git'
+    github: 'https://github.com/omancillav/donly-api.git'
   })
 })
 

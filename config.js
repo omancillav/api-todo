@@ -8,6 +8,6 @@ export const {
   NODE_ENV,
   logger = NODE_ENV === 'production' ? 'combined' : 'dev',
   JWT_SECRET,
-  ALLOWED_ORIGINS: envOrigins = 'http://127.0.0.1:5173',
+  ALLOWED_ORIGINS: envOrigins = 'http://127.0.0.1:5500',
   allowedOrigins = envOrigins.split(',').map(origin => origin.trim())
 } = process.env

@@ -1,6 +1,8 @@
 import cors from 'cors'
 import { allowedOrigins } from '../../config.js'
 
+console.log('Origenes aceptados: ', allowedOrigins)
+
 export const corsMiddleware = () => cors({
   origin: (origin, callback) => {
     if (!origin) {
